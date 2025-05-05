@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-default">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accessible Love Counter</title>
+  <style>
+    :root {
+      --color-primary: #2980b9;
+      --color-secondary: #e67e22;
+      --color-success: #27ae60;
+      --color-danger: #c0392b;
+      --color-warning: #f39c12;
+      --color-text: #333;
+      --color-bg: #f4f4f4;
+      --color-surface: #fff;
+      --font-size-base: 16px;
+      --transition-duration: 0.3s;
+    }
+
+    .theme-dark {
+      --color-text: #e0e0e0;
+      --color-bg: #121212;
+      --color-surface: #2c2c2c;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      margin: 0;
+      padding: 2rem;
+      transition: background-color var(--transition-duration) ease;
+    }
+
+    .app-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--color-surface);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .app-header h1 {
+      text-align: center;
+      margin: 0 0 2rem;
+    }
+
+    .app-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .nav-button {
+      background: var(--color-primary);
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: filter var(--transition-duration) ease;
+    }
+
+    .nav-button:hover,
+    .nav-button:focus {
+      filter: brightness(1.1);
+    }
+
+    .content-section {
+      margin-top: 1.5rem;
+    }
+
+    .counter-controls {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .input-group {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="range"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: filter var(--transition-duration) ease;
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .button-success {
+      background-color: var(--color-success);
+      color: #fff;
+    }
+
+    .button-warning {
+      background-color: var(--color-warning);
+      color: #fff;
+    }
+
+    .button-danger {
+      background-color: var(--color-danger);
+      color: #fff;
+    }
+
+    .counter-display {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      text-align: center;
+      padding: 1rem;
+      background: rgba(0,0,0,0.05);
+      border-radius: 6px;
+    }
+
+    .app-footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--color-text);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="app-container" aria-live="polite">
+    <header class="app-header">
+      <h1 id="mainHeading">Accessible Love Counter</h1>
+    </header>
+
+    <nav class="app-nav" aria-label="Main navigation">
+      <button 
+        id="homeBtn" 
+        class="nav-button" 
+        aria-controls="homeSection" 
+        aria-current="page"
+      >
+        Home
+      </button>
+      <button 
+        id="settingsBtn" 
+        class="nav-button" 
+        aria-controls="settingsSection"
+      >
+        Settings
+      </button>
+    </nav>
+
+    <section 
+      id="homeSection" 
+      class="content-section"
+      aria-labelledby="mainHeading"
+    >
+      <div class="counter-controls">
+        <div class="input-group">
+          <label for="customMessage">Custom Message:</label>
+          <input 
+            type="text" 
+            id="customMessage" 
+            aria-label="Custom love message"
+            placeholder="Enter your custom message"
+          >
+        </div>
+        <div class="button-group">
+          <button id="startBtn" class="button-success">Start</button>
+          <button id="pauseBtn" class="button-warning" disabled>Pause</button>
+          <button id="resetBtn" class="button-danger">Reset</button>
+        </div>
+        <div 
+          id="counterDisplay" 
+          class="counter-display"
+          aria-live="polite"
+          role="status"
+        ></div>
+      </div>
+    </section>
+
+    <section 
+      id="settingsSection" 
+      class="content-section" 
+      hidden
+      aria-labelledby="settingsHeading"
+    >
+      <h2 id="settingsHeading" class="visually-hidden">Settings</h2>
+      <div class="input-group">
+        <label for="fontSize">Font Size:</label>
+        <input 
+          type="range" 
+          id="fontSize" 
+          min="10" 
+          max="24" 
+          step="1"
+          aria-valuemin="12"
+          aria-valuemax="24"
+          aria-valuenow="16"
+        >
+        <span id="fontSizeValue" aria-live="polite">16px</span>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      <p>© 2025 Accessible Web App</p>
+    </footer>
+  </main>
+
+  <script type="module">
+    class LoveCounter {
+      constructor() {
+        this.counterDisplay = document.getElementById('counterDisplay');
+        this.customMessage = document.getElementById('customMessage');
+        this.startBtn = document.getElementById('startBtn');
+        this.pauseBtn = document.getElementById('pauseBtn');
+        this.resetBtn = document.getElementById('resetBtn');
+        this.timer = null;
+        this.count = 0;
+        
+        this.initializeEventListeners();
+      }
+
+      initializeEventListeners() {
+        this.startBtn.addEventListener('click', () => this.start());
+        this.pauseBtn.addEventListener('click', () => this.pause());
+        this.resetBtn.addEventListener('click', () => this.reset());
+      }
+
+      start() {
+        this.timer = setInterval(() => this.updateCounter(), 1000);
+        this.startBtn.disabled = true;
+        this.pauseBtn.disabled = false;
+      }
+
+      pause() {
+        clearInterval(this.timer);
+        this.startBtn.disabled = false;
+        this.pauseBtn.disabled = true;
+      }
+
+      () {
+        this.pause();
+        this.count = 0;
+        this.updateDisplay();
+      }
+
+      updateCounter() {
+        this.count++;
+        this.updateDisplay();
+      }
+
+      updateDisplay() {
+        const message = this.customMessage.value || 'Love you baby';
+        this.counterDisplay.textContent = `${message} ${this.count} ❤`;
+      }
+    }
+
+    class SettingsManager {
+      constructor() {
+        this.fontSize = document.getElementById('fontSize');
+        this.fontSizeValue = document.getElementById('fontSizeValue');
+        this.initializeEventListeners();
+        this.loadSettings();
+      }
+
+      initializeEventListeners() {
+        this.fontSize.addEventListener('input', (e) => {
+          this.updateFontSize(e.target.value);
+        });
+      }
+
+      updateFontSize(size) {
+        document.documentElement.style.fontSize = `${size}px`;
+        this.fontSizeValue.textContent = `${size}px`;
+        localStorage.setItem('fontSize', size);
+      }
+
+      loadSettings() {
+        const savedSize = localStorage.getItem('fontSize') || 16;
+        this.fontSize.value = savedSize;
+        this.updateFontSize(savedSize);
+      }
+    }
+
+    class Navigation {
+      constructor() {
+        this.sections = {
+          home: document.getElementById('homeSection'),
+          settings: document.getElementById('settingsSection')
+        };
+        
+        document.getElementById('homeBtn').addEventListener('click', () => 
+          this.showSection('home'));
+        document.getElementById('settingsBtn').addEventListener('click', () => 
+          this.showSection('settings'));
+      }
+
+      showSection(sectionName) {
+        Object.values(this.sections).forEach(section => {
+          section.hidden = true;
+        });
+        this.sections[sectionName].hidden = false;
+      }
+    }
+
+    // Initialize app
+    new LoveCounter();
+    new SettingsManager();
+    new Navigation();
+  </script>
+</body>
+</html>
